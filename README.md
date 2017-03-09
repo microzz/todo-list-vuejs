@@ -1,4 +1,4 @@
-# todo-list-vuejs
+# todo-list-by-vuejs
 A simple todo list demo by Vue.js
 # vue-todo-list
 
