@@ -37,6 +37,9 @@ export default {
       item.isFinished = !item.isFinished;
     },
     addNew() {
+      if (this.newItem.trim() == '') {
+        return;
+      }
       this.items.push({label: this.newItem, isFinished: false});
       this.newItem = '';
     }
