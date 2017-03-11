@@ -23,19 +23,22 @@ import Store from './store';
 
 export default {
   name: 'app',
+  mounted() {
+    this.hasData = this.items && this.items.length ? true : false;
+  },
   data() {
     return {
       text: 'Todo List',
       items: Store.fetch(),
       newItem: '',
-      hasData:  false
+      hasData: false
     }
   },
   watch: {
     items: {
       handler(items) {
         Store.save(items);
-        this.hasData = Store.fetch()
+        this.hasData = this.items && this.items.length ? true : false;
       },
       deep: true
     }
