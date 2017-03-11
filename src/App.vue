@@ -5,14 +5,20 @@
       <input type="text" v-model="newItem" v-on:keyup.enter="addNew" />
       <button v-on:click="addNew">Add</button>
       <ul>
-        <li v-for="item in items" v-bind:class="{finished: item.isFinished}" v-on:click="toggle(item)">{{item.label}}</li>
+        <li v-for="(item, index) in items">
+          <span v-bind:class="{finished: item.isFinished}">{{item.label}}</span>
+          <span v-on:click="toggle(item)" class="func first">{{!item.isFinished ? 'done' : 'todo'}}</span>
+          <span v-on:click="items.splice(index, 1)" class="func">delete</span>
+        </li>
       </ul>
+      <div v-show="hasData" v-on:click="del" class="delAll">
+        Delete All
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-// import Hello from './components/Hello'
 import Store from './store';
 
 export default {
@@ -21,13 +27,15 @@ export default {
     return {
       text: 'Todo List',
       items: Store.fetch(),
-      newItem: ''
+      newItem: '',
+      hasData:  Store.fetch()
     }
   },
   watch: {
     items: {
       handler(items) {
         Store.save(items);
+        this.hasData = Store.fetch()
       },
       deep: true
     }
@@ -40,8 +48,14 @@ export default {
       if (this.newItem.trim() == '') {
         return;
       }
+      if (!this.items) {
+        this.items = []
+      }
       this.items.push({label: this.newItem, isFinished: false});
       this.newItem = '';
+    },
+    del() {
+      this.items = null;
     }
   },
   components: {}
@@ -56,11 +70,23 @@ input {
   box-shadow: 0 0 8px rgb(150, 104, 219);
   border: none;
 }
+li {
+  margin-top: 9px;
+}
 button {
   border-radius: 14px;
-  background-color: rgba(0, 0, 0, .1);
   color: black;
   box-shadow: 0 0 2px rgb(70, 120, 231);
+  background: none;
+
+}
+span.func {
+  cursor: pointer;
+  margin-left: 7px;
+  text-decoration: underline;
+}
+span.func.first {
+  margin-left: 13px;
 }
 ul {
   text-align: left;
@@ -68,6 +94,9 @@ ul {
 }
 .finished {
   text-decoration: line-through;
+}
+div.delAll {
+  text-decoration: underline;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
