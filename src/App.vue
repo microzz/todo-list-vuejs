@@ -28,7 +28,7 @@ export default {
       text: 'Todo List',
       items: Store.fetch(),
       newItem: '',
-      hasData:  Store.fetch()
+      hasData:  false
     }
   },
   watch: {
